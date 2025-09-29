@@ -1,0 +1,196 @@
+/* PromoCard.css */
+.bg-radial-lines {
+  background-image: radial-gradient(
+    circle at 30% 125%,
+
+    rgba(255, 0, 0, 0.25) 0px,
+    rgba(255, 0, 0, 0.25) 30px,
+    transparent 30px,
+    transparent 45px,
+
+    rgba(255, 0, 0, 0.25) 45px,
+    rgba(255, 0, 0, 0.25) 75px,
+    transparent 75px,
+    transparent 90px,
+
+    rgba(255, 0, 0, 0.25) 90px,
+    rgba(255, 0, 0, 0.25) 120px,
+    transparent 120px,
+    transparent 135px,
+
+    rgba(255, 0, 0, 0.25) 135px,
+    rgba(255, 0, 0, 0.25) 165px,
+    transparent 165px,
+    transparent 180px,
+
+    rgba(255, 0, 0, 0.25) 180px,
+    rgba(255, 0, 0, 0.25) 210px,
+    transparent 210px,
+    transparent 225px,
+
+    rgba(255, 0, 0, 0.25) 225px,
+    rgba(255, 0, 0, 0.25) 255px,
+    transparent 250px,
+    transparent 270px
+  );
+}
+
+/* للأجهزة المتوسطة (تابلت ~768px) */
+@media (min-width: 768px) {
+  .bg-radial-lines {
+    background-image: radial-gradient(
+      circle at 30% 125%,
+
+      rgba(255, 0, 0, 0.25) 0px,
+      rgba(255, 0, 0, 0.25) 30px,
+      transparent 30px,
+      transparent 45px,
+
+      rgba(255, 0, 0, 0.25) 45px,
+      rgba(255, 0, 0, 0.25) 75px,
+      transparent 75px,
+      transparent 90px,
+
+      rgba(255, 0, 0, 0.25) 90px,
+      rgba(255, 0, 0, 0.25) 120px,
+      transparent 120px,
+      transparent 135px,
+
+      rgba(255, 0, 0, 0.25) 135px,
+      rgba(255, 0, 0, 0.25) 165px,
+      transparent 165px,
+      transparent 180px,
+
+      rgba(255, 0, 0, 0.25) 180px,
+      rgba(255, 0, 0, 0.25) 210px,
+      transparent 210px,
+      transparent 225px,
+
+      rgba(255, 0, 0, 0.25) 225px,
+      rgba(255, 0, 0, 0.25) 255px,
+      transparent 250px,
+      transparent 270px,
+
+      rgba(255, 0, 0, 0.25) 270px,
+      rgba(255, 0, 0, 0.25) 300px,
+      transparent 300px,
+      transparent 315px,
+
+      rgba(255, 0, 0, 0.25) 315px,
+      rgba(255, 0, 0, 0.25) 345px,
+      transparent 345px,
+      transparent 360px,
+
+      rgba(255, 0, 0, 0.25) 360px,
+      rgba(255, 0, 0, 0.25) 390px,
+      transparent 390px,
+      transparent 405px
+    );
+  }
+}
+
+/* للأجهزة الكبيرة (لابتوب ~1024px أو أكبر) */
+@media (min-width: 1024px) {
+  .bg-radial-lines {
+    background-image: radial-gradient(
+      circle at 30% 125%,
+      rgba(255, 0, 0, 0.25) 0px,
+      rgba(255, 0, 0, 0.25) 30px,
+      transparent 30px,
+      transparent 45px,
+
+      rgba(255, 0, 0, 0.25) 45px,
+      rgba(255, 0, 0, 0.25) 75px,
+      transparent 75px,
+      transparent 90px,
+
+      rgba(255, 0, 0, 0.25) 90px,
+      rgba(255, 0, 0, 0.25) 120px,
+      transparent 120px,
+      transparent 135px,
+
+      rgba(255, 0, 0, 0.25) 135px,
+      rgba(255, 0, 0, 0.25) 165px,
+      transparent 165px,
+      transparent 180px,
+
+      rgba(255, 0, 0, 0.25) 180px,
+      rgba(255, 0, 0, 0.25) 210px,
+      transparent 210px,
+      transparent 225px,
+
+      rgba(255, 0, 0, 0.25) 225px,
+      rgba(255, 0, 0, 0.25) 255px,
+      transparent 250px,
+      transparent 270px,
+
+      rgba(255, 0, 0, 0.25) 270px,
+      rgba(255, 0, 0, 0.25) 300px,
+      transparent 300px,
+      transparent 315px,
+
+      rgba(255, 0, 0, 0.25) 315px,
+      rgba(255, 0, 0, 0.25) 345px,
+      transparent 345px,
+      transparent 360px,
+
+      rgba(255, 0, 0, 0.25) 360px,
+      rgba(255, 0, 0, 0.25) 390px,
+      transparent 390px,
+      transparent 405px,
+
+      rgba(255, 0, 0, 0.25) 405px,
+      rgba(255, 0, 0, 0.25) 435px,
+      transparent 435px,
+      transparent 450px,
+
+      rgba(255, 0, 0, 0.25) 450px,
+      rgba(255, 0, 0, 0.25) 480px,
+      transparent 480px,
+      transparent 495px,
+
+      rgba(255, 0, 0, 0.25) 495px,
+      rgba(255, 0, 0, 0.25) 525px,
+      transparent 525px,
+      transparent 540px
+    );
+  }
+}
+
+/*  
+  
+    rgba(255,0,0,0.25) 0px, 
+    rgba(255,0,0,0.25) 30px, 
+    transparent 30px, 
+    transparent 45px, 
+
+
+    rgba(255,0,0,0.25) 45px, 
+    rgba(255,0,0,0.25) 75px, 
+    transparent 75px, 
+    transparent 90px, 
+
+  
+    rgba(255,0,0,0.25) 90px, 
+    rgba(255,0,0,0.25) 120px, 
+    transparent 120px, 
+    transparent 135px, 
+
+
+    rgba(255,0,0,0.25) 135px, 
+    rgba(255,0,0,0.25) 165px, 
+    transparent 165px, 
+    transparent 180px, 
+
+    rgba(255,0,0,0.25) 180px, 
+    rgba(255,0,0,0.25) 210px, 
+    transparent 210px, 
+    transparent 225px,
+
+  
+    rgba(255,0,0,0.25) 225px, 
+    rgba(255,0,0,0.25) 255px, 
+    transparent 250px, 
+    transparent 270px
+
+*/

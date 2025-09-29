@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+
+/* @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap'); */
+*{
+  font-family: var(--font-montserrat);
+  font-optical-sizing: auto;
+  font-style: normal;
+}
