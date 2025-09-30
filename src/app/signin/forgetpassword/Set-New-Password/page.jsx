@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -79,9 +78,7 @@ const Resetpassword = () => {
       if (response.status === 200) {
         setSuccess("✅ password reset successful!");
 
-          router.push(
-            "/signin/forgetpassword/Set-New-Password/Successful"
-          );
+        router.push("/signin/forgetpassword/Set-New-Password/Successful");
       } else {
         setError("❌ Failed to reset password. Try again.");
       }
@@ -95,7 +92,7 @@ const Resetpassword = () => {
       }
     }
   };
-// D:\MARAKIIB\marakiib_14-main\src\app\signin\forgetpassword\Set-New-Password\Successful
+  // D:\MARAKIIB\marakiib_14-main\src\app\signin\forgetpassword\Set-New-Password\Successful
   const handleResend = async () => {
     try {
       const response = await axios.post(
@@ -117,8 +114,8 @@ const Resetpassword = () => {
   };
 
   return (
-    <div className="pt-10 flex items-center justify-center px-2">
-      <div className="w-full bg-white p-6 rounded-lg shadow">
+    <div className="pt-10 flex items-center justify-center px-4">
+      <div className="w-full bg-white">
         <BackArrow />
         <h2 className="text-2xl font-bold text-center text-red-600">
           Set A New password
@@ -153,21 +150,10 @@ const Resetpassword = () => {
                   onChange={(e) => handleChange(e.target.value, index)}
                   onKeyDown={(e) => handleKeyDown(e, index)}
                   onPaste={handlePaste}
-                  className="w-14 h-14 border border-gray-200 rounded-lg text-center text-lg focus:outline-none bg-gray-50"
+                  className="w-9 h-9 md:w-14 md:h-14 border border-gray-200 rounded-lg text-center text-lg focus:outline-none focus:ring-2 focus:ring-red-600 bg-gray-50"
                 />
               ))}
             </div>
-
-            <p className="text-sm text-gray-900 mt-7">
-              Didn’t receive the code?{" "}
-              <button
-                type="button"
-                className="text-red-600 font-bold underline"
-                onClick={handleResend}
-              >
-                Resend Code
-              </button>
-            </p>
 
             {/* New password */}
             <div className="relative">
@@ -224,6 +210,18 @@ const Resetpassword = () => {
                 )}
               </button>
             </div>
+            <div className="text-center">
+              <p className="text-sm text-gray-900 mt-7">
+                Didn’t receive the code?{" "}
+                <button
+                  type="button"
+                  className="text-red-600 font-bold underline"
+                  onClick={handleResend}
+                >
+                  Resend Code
+                </button>
+              </p>
+            </div>
 
             <Button text="Set New password" type="submit" />
           </div>
@@ -234,4 +232,3 @@ const Resetpassword = () => {
 };
 
 export default Resetpassword;
-
