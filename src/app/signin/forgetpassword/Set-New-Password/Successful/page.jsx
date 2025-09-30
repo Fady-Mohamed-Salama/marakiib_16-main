@@ -14,13 +14,7 @@ const Successful = () => {
   };
 
   return (
-    // <div className="pt-10 flex items-center justify-center px-4">
-    //   <div className="w-full bg-white text-center">
-    //     {/* Back Arrow */}
-    //     <BackArrow />
 
-    //   </div>
-    // </div>
 
     <div className="pt-10 flex items-center justify-center px-4">
       <div className="w-full bg-white">

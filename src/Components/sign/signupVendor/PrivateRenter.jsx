@@ -7,16 +7,15 @@ import PasswordField from "../common/PasswordField";
 import { useRouter } from "next/navigation";
 import reducer, { initialStatePrivateRenter } from "./reducer";
 import validate from "./validate";
-import axios from "axios";
 import { FaRegCalendar } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import Button from "@/Components/ui/Button";
 import { useAuth } from "@/Contexts/AuthContext";
-// import API_URL from "../../lib/api";
+import api from "@/lib/api";
 
 const PrivateRenter = () => {
-  const { login } = useAuth();
+  const { saveEmail } = useAuth();
   const [state, dispatch] = useReducer(reducer, initialStatePrivateRenter);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +23,6 @@ const PrivateRenter = () => {
   const [fileSelected, setFileSelected] = useState(false);
   const fileInputRef = useRef(null);
   const router = useRouter();
-
   // تحديث أي حقل
   const handleFieldChange = (field, value) => {
     dispatch({ type: "SET_FIELD", field, value });
@@ -68,33 +66,17 @@ const PrivateRenter = () => {
           formData.append(key, state[key]);
         }
       }
-
-      // ✅ اطبع القيم اللي داخلة الـ request عشان تتأكد
-      // for (let [key, value] of formData.entries()) {
-      //   console.log(`${key}:`, value);
-      // }
-
-      // ❌ متكتبش Content-Type يدوي
-      // const response = await axios.post(
-      //   "https://marakiib.com/api/register",
-      //   formData,
-      //   {
-      //     headers: { "Content-Type": "multipart/form-data" },
-      //   }
-      // );
-      const response = await api.post("/register", formData);
+      const response = await api.post("/register", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (response?.status === 201 || response?.status === 200) {
-        // console.log("✅ Signup successful:", response.data["email"]);
-        console.log("✅ Signup successful:", response.data.user.email);
-
-        // reset form
+        saveEmail(response.data.user.email);
+        console.log("✅ Signup successful:", response.data.user);
         dispatch({ type: "RESET", payload: initialStatePrivateRenter });
-
-        // TODO: خزن الـ token لو الباك إند بيرجع Token
-        // localStorage.setItem("token", response.data.token);
-
-        router.push(`/signup/verifycode?email=${response.data.user.email}`);
+        router.push(`/signup/verifycode`);
       } else {
         console.error("❌ Signup failed:", response.data);
       }
@@ -236,3 +218,4 @@ const PrivateRenter = () => {
 };
 
 export default PrivateRenter;
+  

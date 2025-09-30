@@ -11,12 +11,12 @@
 // import ShowModal from "@/Components/Modals/ShowModal";
 // import { useRouter } from "next/navigation";
 // import { useAuth } from "@/Contexts/AuthContext";
-// // import api from "@/Components/lib/api";
-// import axios from "axios";
+// import api from "@/lib/api";
+// // import axios from "axios";
 
 // const Signin = () => {
 //   // const { userType } = useUserType();
-//   const { login , token} = useAuth();
+//   const { login } = useAuth();
 //   const [showPassword, setShowPassword] = useState(false);
 //   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -44,21 +44,19 @@
 //     try {
 //       // const response = await api.post("/login", { ...formData, userType });
 
-//           const response = await axios.post(
-//         "https://marakiib.com/api/login",
+//           const response = await api.post(
+//         "/login",
 //         formData,
-//         {
-//           headers: { Accept: "application/json" },
-//         }
+//         // {
+//         //   headers: { Accept: "application/json" },
+//         // }
 //       );
 
 //       if (response.status === 200) {
 //         console.log("✅ Login Success:", response.data);
 
-//       const { user, access_token, token_type } = response.data;
-
-//       // ✅ خزن كل حاجة في الكونتكست + السيشن
-//       login(user, user.role, `${token_type} ${access_token}`);
+//         // ✅ خزن بيانات اليوزر فقط (الـ token في الكوكيز)
+//         login(response.data.user, response.data.user.role);
 
 //         router.push("/");
 //       }
@@ -98,8 +96,8 @@
 //                   placeholder="Email"
 //                   value={formData.email}
 //                   onChange={handleChange}
-//                   className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50
-//                     focus:outline-none focus:ring-2 focus:ring-red-600
+//                   className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 
+//                     focus:outline-none focus:ring-2 focus:ring-red-600 
 //                     placeholder:text-sm placeholder:text-gray-400 placeholder:font-medium text-base font-medium"
 //                   required
 //                 />
@@ -119,8 +117,8 @@
 //                   placeholder="Password"
 //                   value={formData.password}
 //                   onChange={handleChange}
-//                   className="w-full pl-10 pr-10 py-3 rounded-xl bg-gray-50
-//                     focus:outline-none focus:ring-2 focus:ring-red-600
+//                   className="w-full pl-10 pr-10 py-3 rounded-xl bg-gray-50 
+//                     focus:outline-none focus:ring-2 focus:ring-red-600 
 //                     placeholder:text-sm placeholder:text-gray-400 text-base font-medium"
 //                   required
 //                 />
@@ -212,47 +210,67 @@
 // };
 
 // export default Signin;
-// ==============================================================
 
 "use client";
+
 import React, { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { IoMdLock } from "react-icons/io";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/Contexts/AuthContext";
 import BackArrow from "@/Components/BackArrow/BackArrow";
 import Button from "@/Components/ui/Button";
+// import { useUserType } from "@/Contexts/UserTypeContext";
 import ShowModal from "@/Components/Modals/ShowModal";
-import api from "@/lib/api";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/Contexts/AuthContext";
+// import api from "@/Components/lib/api";
+import axios from "axios";
 
 const Signin = () => {
+  // const { userType } = useUserType();
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+
   const router = useRouter();
 
+  // تحديث الحقول
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrorMessage("");
   };
 
+  // إرسال الفورم
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setErrorMessage("");
 
     try {
-      const response = await api.post("/login", formData);
+      // const response = await api.post("/login", { ...formData, userType });
+
+          const response = await axios.post(
+        "https://marakiib.com/api/login",
+        formData,
+        {
+          headers: { Accept: "application/json" },
+        }
+      );
 
       if (response.status === 200) {
-        const { user, access_token, token_type } = response.data;
-        login(user, user.role, `${token_type} ${access_token}`);
+        console.log("✅ Login Success:", response.data);
+
+        // ✅ خزن بيانات اليوزر فقط (الـ token في الكوكيز)
+        login(response.data.user, response.data.user.role);
+
         router.push("/");
       }
     } catch (error) {
@@ -266,16 +284,20 @@ const Signin = () => {
   return (
     <div className="pt-4 flex items-center justify-center px-4">
       <div className="w-full bg-white">
+        {/* Back Arrow */}
         <BackArrow />
+
+        {/* Title */}
         <h2 className="text-2xl font-bold text-center text-red-600">Sign In</h2>
-        <p className="text-gray-400 text-base md:text-lg text-center mt-2">
+        <p className="text-gray-400 text-base md:text-lg text-center mt-2 mx-auto w-full ">
           Sign in now and enjoy rental ease like never before.
         </p>
 
+        {/* Form */}
         <form onSubmit={handleSubmit} className="mt-6 w-full max-w-md mx-auto">
           <div className="space-y-4">
             {/* Email */}
-            <div>
+            <div className="md:flex-1">
               <label className="block text-sm font-medium text-gray-950">
                 Email
               </label>
@@ -287,16 +309,16 @@ const Signin = () => {
                   placeholder="Email"
                   value={formData.email}
                   onChange={handleChange}
-                  required
                   className="w-full pl-10 pr-4 py-3 rounded-xl bg-gray-50 
-                  focus:outline-none focus:ring-2 focus:ring-red-600 
-                  placeholder:text-sm placeholder:text-gray-400"
+                    focus:outline-none focus:ring-2 focus:ring-red-600 
+                    placeholder:text-sm placeholder:text-gray-400 placeholder:font-medium text-base font-medium"
+                  required
                 />
               </div>
             </div>
 
             {/* Password */}
-            <div>
+            <div className="md:flex-1">
               <label className="block text-sm font-medium text-gray-950">
                 Password
               </label>
@@ -308,11 +330,12 @@ const Signin = () => {
                   placeholder="Password"
                   value={formData.password}
                   onChange={handleChange}
-                  required
                   className="w-full pl-10 pr-10 py-3 rounded-xl bg-gray-50 
-                  focus:outline-none focus:ring-2 focus:ring-red-600 
-                  placeholder:text-sm placeholder:text-gray-400"
+                    focus:outline-none focus:ring-2 focus:ring-red-600 
+                    placeholder:text-sm placeholder:text-gray-400 text-base font-medium"
+                  required
                 />
+
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -325,7 +348,9 @@ const Signin = () => {
                   )}
                 </button>
               </div>
-              <div className="flex justify-end mt-2">
+
+              {/* Forgot Password Link */}
+              <div className="flex justify-end mt-4">
                 <Link
                   href="/signin/forgetpassword"
                   className="text-sm text-red-600 font-semibold"
@@ -336,12 +361,14 @@ const Signin = () => {
             </div>
           </div>
 
+          {/* Error Message */}
           {errorMessage && (
             <p className="text-red-600 text-sm mt-3 text-center">
               {errorMessage}
             </p>
           )}
 
+          {/* Sign in button */}
           <Button
             text={loading ? "Signing in..." : "Sign In"}
             type="submit"
@@ -349,7 +376,6 @@ const Signin = () => {
             className="font-medium mt-4"
           />
         </form>
-
 
         {/* Or Divider */}
         <div className="flex items-center my-6">
@@ -389,7 +415,7 @@ const Signin = () => {
           </button>
         </p>
 
-
+        {/* show modal */}
         <ShowModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </div>
     </div>
@@ -397,3 +423,4 @@ const Signin = () => {
 };
 
 export default Signin;
+

@@ -5,12 +5,13 @@ import PasswordField from "../common/PasswordField";
 import { useRouter } from "next/navigation";
 import reducer, { initialStateRentalOffice } from "./reducer";
 import validate from "./validate";
-import axios from "axios";
-// import API_URL from "../../lib/api";
+import api from "@/lib/api";
 import { FaRegCalendar } from "react-icons/fa";
 import { FaUser } from "react-icons/fa6";
 import { MdEmail, MdFileCopy } from "react-icons/md";
 import Button from "@/Components/ui/Button";
+import { useAuth } from "@/Contexts/AuthContext";
+
 const RentalOffice = () => {
   const [state, dispatch] = useReducer(reducer, initialStateRentalOffice);
   const [errors, setErrors] = useState({});
@@ -18,7 +19,7 @@ const RentalOffice = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [fileSelected, setFileSelected] = useState(false);
   const fileInputRef = useRef(null);
-
+  const { saveEmail } = useAuth();
   const router = useRouter();
 
   const handleFieldChange = (field, value) => {
@@ -47,24 +48,21 @@ const RentalOffice = () => {
       }
 
       // 3. إرسال للباك إند
-      // const response = await axios.post(
-      //   "https://marakiib.com/api/register",
-      //   formData,
-      //   {
-      //     headers: { Accept: "application/json" },
-      //   }
-      // );
-      const response = await api.post("/register", formData);
+      const response = await api.post("/register", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       // 4. النتيجة
       if (response?.status === 201 || response?.status === 200) {
+        saveEmail(response.data.user.email);
         console.log("✅ Signup successful:", response.data.user.email);
 
         // reset form
         dispatch({ type: "RESET", payload: initialStateRentalOffice });
-
-
-        router.push(`/signup/verifycode?email=${response.data.user.email}`);
+        // ?email=${response.data.user.email}
+        router.push(`/signup/verifycode`);
       } else {
         console.error("❌ Signup failed:", response.data);
       }
@@ -93,13 +91,6 @@ const RentalOffice = () => {
       onSubmit={handleSubmit}
       className="mt-6 w-full max-w-3xl mx-auto px-4 md:px-0"
     >
-      {/* <input
-        type="text"
-        name="role"
-        value="RentalOffice"
-        className="hidden"
-        disabled
-      /> */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
         {/* Name */}
         <InputField

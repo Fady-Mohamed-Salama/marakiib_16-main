@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useReducer, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -8,14 +7,14 @@ import InputField from "../common/InputField";
 import PasswordField from "../common/PasswordField";
 import PhoneField from "../common/PhoneField";
 import LicenseUpload from "../common/LicenseUpload";
-import axios from "axios";
 // icons
 import { FaUser } from "react-icons/fa6";
 import { MdEmail, MdHome } from "react-icons/md";
 import Button from "@/Components/ui/Button";
 import Link from "next/link";
 import BackArrow from "@/Components/BackArrow/BackArrow";
-// import { registerUser } from "@/Components/lib/api";
+import { useAuth } from "@/Contexts/AuthContext";
+import api from "@/lib/api";
 
 const SignupUser = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -23,7 +22,7 @@ const SignupUser = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
-
+  const { saveEmail } = useAuth();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -44,30 +43,21 @@ const SignupUser = () => {
         }
       }
 
-      // ✅ call API
-      // const response = await registerUser(formData);
+      // 3. إرسال للباك إند
 
-      const response = await axios.post(
-        "https://marakiib.com/api/register",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const response = await api.post("/register", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (response?.status === 201 || response?.status === 200) {
-        // console.log("✅ Signup successful:", response.data["email"]);
         console.log("✅ Signup successful:", response.data.user.email);
+        saveEmail(response.data.user.email);
 
-        // reset form
         dispatch({ type: "RESET" });
 
-        // TODO: خزن الـ token لو الباك إند بيرجع Token
-        // localStorage.setItem("token", response.data.token);
-
-        // روح لصفحة التفعيل
-        // router.push("/signup/verifycode");
-        router.push(`/signup/verifycode?email=${response.data.user.email}`);
+        router.push(`/signup/verifycode`);
       } else {
         console.error("❌ Signup failed:", response.data);
       }
