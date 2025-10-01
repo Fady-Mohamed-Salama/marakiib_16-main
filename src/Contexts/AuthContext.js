@@ -1,54 +1,68 @@
 
+
 "use client";
-import { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // 🟢 حالة لتخزين بيانات المستخدم
-  const [role, setRole] = useState(null); // 🟢 حالة لتخزين الدور
-  const [email, setEmail] = useState(null); // 🟢 حالة لتخزين الإيميل
-  const [otp_code, setotp_code] = useState(null); // 🟢 حالة لتخزين otp_code
+  const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [otp_code, setotp_code] = useState(null);
+  const [access_token, setAccessToken] = useState(null);
 
-  useEffect(() => {
-    const storedUser = sessionStorage.getItem("user");
-    const storedRole = sessionStorage.getItem("role");
-    const storedEmail = sessionStorage.getItem("email");
-    const storedotp_code = sessionStorage.getItem("otp_code");
-
-    if (storedUser) setUser(JSON.parse(storedUser));
-    if (storedRole) setRole(storedRole);
-    if (storedEmail) setEmail(storedEmail);
-    if (storedotp_code) setotp_code(storedotp_code);
-  }, []);
-
-  const login = (userData, roleData) => {
+  // 🟢 تسجيل الدخول
+  const login = (userData, roleData, accessToken) => {
     setUser(userData);
     setRole(roleData);
+    setAccessToken(accessToken);
+
     sessionStorage.setItem("user", JSON.stringify(userData));
     sessionStorage.setItem("role", roleData);
+    sessionStorage.setItem("access_token", accessToken);
   };
 
-  const saveEmail = (userEmail) => {
-    setEmail(userEmail);
-    sessionStorage.setItem("email", userEmail);
-  };
-
-  const saveotp_code = (otp_codeCode) => {
-    setotp_code(otp_codeCode);
-    sessionStorage.setItem("otp_code", otp_codeCode);
-  };
-
+  // 🟢 تسجيل الخروج
   const logout = () => {
     setUser(null);
     setRole(null);
     setEmail(null);
     setotp_code(null);
+    setAccessToken(null);
+
     sessionStorage.clear();
   };
 
+  // 🟢 تحميل البيانات من الـ sessionStorage عند فتح الصفحة
+  useEffect(() => {
+    const storedUser = sessionStorage.getItem("user");
+    const storedRole = sessionStorage.getItem("role");
+    const storedEmail = sessionStorage.getItem("email");
+    const storedOtp = sessionStorage.getItem("otp_code");
+    const storedToken = sessionStorage.getItem("access_token");
+
+    if (storedUser) setUser(JSON.parse(storedUser));
+    if (storedRole) setRole(storedRole);
+    if (storedEmail) setEmail(storedEmail);
+    if (storedOtp) setotp_code(storedOtp);
+    if (storedToken) setAccessToken(storedToken);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, role, email, otp_code, login, logout, saveEmail, saveotp_code }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        role,
+        email,
+        otp_code,
+        access_token,
+        login,
+        logout,
+        setEmail,
+        setotp_code,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

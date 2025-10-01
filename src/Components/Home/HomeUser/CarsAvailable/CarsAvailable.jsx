@@ -6,189 +6,42 @@ import CarCard from "@/Components/ui/CarCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
-const cars = [
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-  {
-    name: "Koenigsegg",
-    type: "Sport",
-    image: "/images/car.png",
-    fuel: "90L",
-    gear: "Manual",
-    people: "2 People",
-    price: 99.0,
-  },
-];
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Loader from "@/Components/ui/Loader";
 const CarsAvailable = () => {
+    const [cars, setCars] = useState([]);
+    const [loading, setLoading] = useState(true);
+  
+    // جلب البيانات من الـ API
+    useEffect(() => {
+      const fetchCars = async () => {
+        try {
+          const response = await axios.get(
+            "https://marakiib.com/api/public/cars/available",
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "Accept-Language": "en",
+              },
+            }
+          );
+          setCars(response.data.data);
+          console.log(response.data.data);
+        } catch (error) {
+          console.error("❌ Error fetching cars:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchCars();
+    }, []);
+  
+    if (loading) {
+      return <Loader />;
+    }
   return (
     <div className="bg-white py-6">
       <h1 className="text-lg text-black md:text-2xl font-semibold px-4 pb-3">
