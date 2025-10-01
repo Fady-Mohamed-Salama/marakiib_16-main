@@ -1,3 +1,4 @@
+
 "use client";
 import { useParams } from "next/navigation";
 import { FaCogs, FaStar } from "react-icons/fa";
@@ -14,6 +15,10 @@ import { LuMessageCircleMore } from "react-icons/lu";
 import { useAuth } from "@/Contexts/AuthContext";
 import axios from "axios";
 
+// 🟢 استيراد مكتبة الخرائط
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import Loader from "@/Components/ui/Loader";
+
 const CarDetailsPage = () => {
   const { id } = useParams();
   const [car, setCar] = useState(null);
@@ -22,6 +27,11 @@ const CarDetailsPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const swiperRef = useRef(null);
   const { access_token } = useAuth();
+
+  // 🟢 تحميل Google Maps API
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: "AIzaSyD-qSlfNKXq_-xr5GHQqTJjqoN3bkJrsG8",
+  });
 
   useEffect(() => {
     const fetchCar = async () => {
@@ -46,9 +56,7 @@ const CarDetailsPage = () => {
       }
     };
 
-    if (id) {
-      fetchCar();
-    }
+    if (id) fetchCar();
   }, [id]);
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
@@ -57,6 +65,17 @@ const CarDetailsPage = () => {
 
   // صور الجاليري (صورة رئيسية + صور إضافية)
   const gallery = [car.main_image, ...(car.extra_images || [])];
+
+  // 🟢 إعدادات الخريطة
+  const containerStyle = {
+    width: "100%",
+    height: "400px",
+  };
+
+  const center = {
+    lat: parseFloat(car.latitude) || 30.0444, // لو مش موجود → القاهرة
+    lng: parseFloat(car.longitude) || 31.2357,
+  };
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-2">
@@ -143,9 +162,7 @@ const CarDetailsPage = () => {
       <div className="mt-6">
         <div className="flex justify-between items-center pb-2 border-b border-gray-300">
           <div>
-            <h1 className="text-xl md:text-2xl font-bold">
-              {car.name}
-            </h1>
+            <h1 className="text-xl md:text-2xl font-bold">{car.name}</h1>
             <p className="text-gray-500 text-sm mt-1">{car.description}</p>
             <p className="text-gray-500 text-sm mt-1">Model: {car.model}</p>
           </div>
@@ -187,15 +204,6 @@ const CarDetailsPage = () => {
             </span>
             <p>{car.user?.address || "No address provided"}</p>
           </div>
-
-          {/* <div className="flex items-center gap-2">
-            <span className="text-red-600 text-lg">
-              <FaLocationDot />
-            </span>
-            <p>
-              {car.latitude}, {car.longitude}
-            </p>
-          </div> */}
         </div>
 
         {/* الخصائص */}
@@ -220,7 +228,6 @@ const CarDetailsPage = () => {
 
         {/* Reviews */}
         <div className="mt-6">
-          {/* Header */}
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-lg font-semibold">Reviews</h2>
             <button className="text-red-600 text-sm font-semibold">
@@ -228,7 +235,6 @@ const CarDetailsPage = () => {
             </button>
           </div>
 
-          {/* Show Reviews if Exist */}
           {car.reviews && car.reviews.length > 0 ? (
             <div className="space-y-3">
               {car.reviews.map((review, i) => (
@@ -251,7 +257,9 @@ const CarDetailsPage = () => {
                       {Array.from({ length: review.rating }, (_, index) => (
                         <FaStar key={index} />
                       ))}
-                      <span className="ml-1">{review.rating.toFixed(1)}</span>
+                      <span className="ml-1">
+                        {Number(review.rating).toFixed(1)}
+                      </span>
                     </div>
                     <p className="text-gray-600 text-sm mt-1">
                       {review.comment}
@@ -261,11 +269,28 @@ const CarDetailsPage = () => {
               ))}
             </div>
           ) : (
-            // No Reviews
             <div className="text-center py-6 text-gray-900 font-bold text-xl">
               No reviews yet
             </div>
           )}
+        </div>
+
+        {/* 🟢 الخريطة */}
+        <div className="mt-6">
+          <h2 className="text-lg font-semibold mb-3">Car Location</h2>
+          <div className="rounded-xl overflow-hidden shadow-md">
+            {isLoaded ? (
+              <GoogleMap
+                mapContainerStyle={containerStyle}
+                center={center}
+                zoom={14}
+              >
+                <Marker position={center} />
+              </GoogleMap>
+            ) : (
+              <p><Loader /></p>
+            )}
+          </div>
         </div>
 
         {/* السعر */}
