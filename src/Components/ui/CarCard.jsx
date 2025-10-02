@@ -13,7 +13,7 @@ export default function CarCard({ car }) {
   // console.log(car); // للتأكد من شكل البيانات
   const handleBooking = (e) => {
     e.preventDefault();
-    router.push(`/booking-details`);
+    router.push(`/booking-details/${car.id}`);
   };
 
   // لو الـ features لسه مش جاية

@@ -7,12 +7,6 @@ import { useAuth } from "@/Contexts/AuthContext";
 export default function EditProfilePage() {
     const { user,  } = useAuth();
 
-  // const user = {
-  //   firstName: "Benjamin",
-  //   email: "benjaminJack@gmail.com",
-  //   phone: "+100******00",
-  //   image: null, 
-  // };
   if (!user) {
     return (
       <div className="flex justify-center items-center">
