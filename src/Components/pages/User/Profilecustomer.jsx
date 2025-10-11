@@ -67,7 +67,7 @@ export default function Profilecustomer() {
         <div className="flex items-center justify-between mt-2">
           <div className="flex items-center gap-2">
             {user.image ? (
-              <Image
+              <img
                 src={user.image}
                 alt="Profile"
                 width={80}
