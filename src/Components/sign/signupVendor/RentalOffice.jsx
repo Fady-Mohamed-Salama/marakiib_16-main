@@ -11,6 +11,7 @@ import { FaUser } from "react-icons/fa6";
 import { MdEmail, MdFileCopy } from "react-icons/md";
 import Button from "@/Components/ui/Button";
 import { useAuth } from "@/Contexts/AuthContext";
+import Loader from "@/Components/ui/Loader";
 
 const RentalOffice = () => {
   const [state, dispatch] = useReducer(reducer, initialStateRentalOffice);
@@ -21,6 +22,8 @@ const RentalOffice = () => {
   const fileInputRef = useRef(null);
   const { saveEmail } = useAuth();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  
 
   const handleFieldChange = (field, value) => {
     dispatch({ type: "SET_FIELD", field, value });
@@ -29,10 +32,12 @@ const RentalOffice = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const validationErrors = validate(state);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      setLoading(false);
       return;
     }
     setErrors({});
@@ -68,6 +73,8 @@ const RentalOffice = () => {
       }
     } catch (err) {
       console.error("❌ Error submitting form:", err.response?.data || err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -242,7 +249,7 @@ const RentalOffice = () => {
       </div>
 
       {/* Submit */}
-      <Button text="Sign Up" type="submit" className="font-medium" />
+      <Button text={loading ? <Loader /> : "Sign Up"} type="submit" className="font-medium" />
     </form>
   );
 };

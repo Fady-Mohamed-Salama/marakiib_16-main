@@ -1,9 +1,10 @@
 "use client";
 import BackArrow from "@/Components/BackArrow/BackArrow";
 import { useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/Contexts/AuthContext";
+import api from "@/lib/api";
 
 export default function BookingDetailsCard() {
   const { id } = useParams(); // car_id من ال URL
@@ -36,8 +37,8 @@ export default function BookingDetailsCard() {
       };
 
       // ابعت الـ request
-      const res = await axios.post(
-        "https://marakiib.com/api/bookings",
+      const res = await api.post(
+        "/bookings",
         payload,
         {
           headers: {
@@ -52,8 +53,8 @@ export default function BookingDetailsCard() {
       setMessage({ type: "success", text: "Booking submitted successfully 🎉" });
 
       setTimeout(() => {
-        router.push("/"); // بعد ثانيتين روح لصفحة الحجوزات
-      }, 2000);
+        router.push("/"); // بعد ثانية واحدة روح لصفحة الحجوزات
+      }, 1000);
 
       // تفريغ الفورم
       setPhone("");

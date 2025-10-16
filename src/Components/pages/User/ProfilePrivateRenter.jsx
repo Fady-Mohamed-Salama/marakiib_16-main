@@ -12,7 +12,7 @@ import {
   MdKeyboardArrowRight,
   MdOutlineModeEdit,
 } from "react-icons/md";
-import { IoMdHeartEmpty } from "react-icons/io";
+// import { IoMdHeartEmpty } from "react-icons/io";
 import { CiGlobe } from "react-icons/ci";
 import { useAuth } from "@/Contexts/AuthContext";
 import LogoutModal from "@/Components/Modals/LogoutModal"; // 🟢 أنشئ الملف هنا
@@ -108,13 +108,34 @@ export default function ProfilePrivateRenter() {
               onClick={() => router.push("/profile/Languages")}
             />
             <SectionItem
-              icon={<MdOutlinePrivacyTip />}
-              title="Privacy Policy"
-            />
-            <SectionItem
               icon={<MdHeadphones />}
               title="Help Support"
               onClick={() => router.push("/profile/Help-Support")}
+            />
+            <SectionItem
+              icon={<MdOutlinePrivacyTip />}
+              title="Privacy Policy"
+              onClick={() => router.push("/profile/Privacy-Policy")}
+            />
+            <SectionItem
+              icon={<MdGavel />}
+              title="Terms & Conditions"
+              onClick={() => router.push("/profile/Terms")}
+            />
+            <SectionItem
+              icon={<MdInfoOutline />}
+              title="About"
+              onClick={() => router.push("/profile/About")}
+            />
+            <SectionItem
+              icon={<MdOutlineMailOutline />}
+              title="Contact"
+              onClick={() => router.push("/profile/Contact")}
+            />
+            <SectionItem
+              icon={<MdQuestionAnswer />}
+              title="FAQs"
+              onClick={() => router.push("/profile/faqs")}
             />
             <SectionItem
               icon={<MdOutlineLogout />}

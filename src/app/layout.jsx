@@ -27,15 +27,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${montserrat.variable} flex flex-col min-h-screen`}>
-        <UserTypeProvider>
-          <Header />
-          <main className="flex-1">
-            <AuthProvider>
+        <AuthProvider>
+          <UserTypeProvider>
+            <Header />
+            <main className="flex-1">
               <Providers>{children}</Providers>
-            </AuthProvider>
-          </main>
-          <Footer />
-        </UserTypeProvider>
+            </main>
+            <Footer />
+          </UserTypeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

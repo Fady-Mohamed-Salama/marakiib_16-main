@@ -3,8 +3,8 @@
 import BackArrow from "@/Components/BackArrow/BackArrow";
 import CardBooking from "@/Components/ui/CardBooking";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useAuth } from "@/Contexts/AuthContext";
+import api from "@/lib/api";
 
 const BookingCar = () => {
   const [bookings, setBookings] = useState([]);
@@ -14,7 +14,7 @@ const BookingCar = () => {
   const fetchBookings = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("https://marakiib.com/api/bookings", {
+      const res = await api.get("/bookings", {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -37,18 +37,14 @@ const BookingCar = () => {
 
   const handleCancel = async (id) => {
     try {
-      await axios.post(
-        `https://marakiib.com/api/bookings/${id}/cancel`,
-        {},
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${access_token}`, // خزن التوكن عندك
-            "Accept-Language": "en",
-          },
-        }
-      );
+      await api.post(`/bookings/${id}/cancel`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${access_token}`, // خزن التوكن عندك
+          "Accept-Language": "en",
+        },
+      });
       fetchBookings();
     } catch (error) {
       console.error("Error cancelling booking:", error);

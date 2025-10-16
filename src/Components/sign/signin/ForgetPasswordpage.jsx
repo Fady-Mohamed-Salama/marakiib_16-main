@@ -3,9 +3,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import BackArrow from "@/Components/BackArrow/BackArrow";
 import Button from "@/Components/ui/Button";
-// import api from "@/lib/api";
 import { useAuth } from "@/Contexts/AuthContext";
-import axios from "axios";
+import api from "@/lib/api";
 // import { useAuth } from "@/Context/AuthContext";
 
 const ForgetPasswordpage = () => {
@@ -17,8 +16,8 @@ const ForgetPasswordpage = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "https://marakiib.com/api/forgot-password", // ✅ صح
+      const response = await api.post(
+        "/forgot-password", // ✅ صح
         { email },
         { headers: { "Content-Type": "application/json" } }
       );

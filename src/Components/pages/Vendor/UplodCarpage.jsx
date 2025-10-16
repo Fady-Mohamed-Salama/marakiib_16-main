@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import React, { useState, useRef, useEffect, useReducer } from "react";
@@ -10,7 +8,7 @@ import api from "@/lib/api";
 import { initialState, reducer } from "./ReducerUplodcar";
 import { FaRegCalendar } from "react-icons/fa6";
 import { useAuth } from "@/Contexts/AuthContext";
-import axios from "axios";
+// import axios from "axios";
 
 const UploadCarPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -160,27 +158,27 @@ const UploadCarPage = () => {
     }
 
     try {
-  const response = await axios.post(
-    "https://marakiib.com/api/cars",
-    formData,
-    {
-      headers: {
-        Accept: "application/json",
-        // احذف السطر ده: "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${access_token}`,
-      },
+      const response = await api.post(
+        "/cars",
+        formData,
+        {
+          headers: {
+            Accept: "application/json",
+            // احذف السطر ده: "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+      console.log("Upload successful:", response.data);
+    } catch (error) {
+      console.error("Error uploading car:", error);
+      // أضف لوگ إضافي للتشخيص
+      if (error.response) {
+        console.error("Response error:", error.response.data);
+      } else if (error.request) {
+        console.error("Request error (CORS/network):", error.request);
+      }
     }
-  );
-  console.log("Upload successful:", response.data);
-} catch (error) {
-  console.error("Error uploading car:", error);
-  // أضف لوگ إضافي للتشخيص
-  if (error.response) {
-    console.error("Response error:", error.response.data);
-  } else if (error.request) {
-    console.error("Request error (CORS/network):", error.request);
-  }
-}
 
     // try {
     //   const response = await axios.post(
@@ -589,7 +587,7 @@ const UploadCarPage = () => {
               <option value="" disabled hidden>
                 Select Category
               </option>
-              {categories.length > 0 ? (
+              {Array.isArray(categories) && categories.length > 0 ? (
                 categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.name}

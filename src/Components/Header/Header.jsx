@@ -5,16 +5,26 @@ import React, { useState } from "react";
 import { LuMessageCircleMore } from "react-icons/lu";
 import { TbRoad } from "react-icons/tb";
 import { HiOutlineBell } from "react-icons/hi2";
-import { FaRegUser } from "react-icons/fa6";
+import { FaChevronDown, FaRegUser } from "react-icons/fa6";
 import { FiMenu } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
 import MobileMenu from "../Modals/MobileMenu";
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation"; // ✅ هنحتاج useRouter
+import { useAuth } from "@/Contexts/AuthContext"; // ✅ استدعاء الكونتكست
+import LogoutModal from "../Modals/LogoutModal";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+    const [showPages, setShowPages] = useState(false);
 
+   const router = useRouter();
+  const { user, logout } = useAuth(); // ✅ استدعاء الكونتكست
+
+
+
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
   // Function to determine active link classes
   const getLinkClasses = (href) => {
     const isActive = pathname === href;
@@ -22,6 +32,14 @@ const Header = () => {
       isActive ? "text-red-500" : "text-white hover:text-red-500"
     }`;
   };
+
+
+    const handleLogout = () => {
+    logout(); // 🟢 من Context
+    setShowLogoutModal(false);
+    router.push("/signin"); // 🟢 بعد تسجيل الخروج يروح للصفحة دي
+  };
+
 
   return (
     <header className="bg-gray-950 px-2 md:px-1 sticky top-0 z-50">
@@ -45,24 +63,7 @@ const Header = () => {
             <TbRoad className="text-xl lg:text-2xl" />
             <span className="text-sm font-medium">Booking</span>
           </Link>
-
-          {/* <Link href="/" className={getLinkClasses("/")}>
-            <span
-              className={`flex items-center justify-center w-12 h-12 rounded-full transition ${
-                pathname === "/"
-                  ? "bg-red-500"
-                  : "bg-white fill-black hover:bg-red-600"
-              }`}
-            >
-              <img
-                src="./images/x.svg"
-                width={22}
-                height={22}
-                alt="Home"
-                className={pathname === "/" ? "brightness-0 invert" : "brightness-0 invert"}
-              />
-            </span>
-          </Link> */}
+          {/* Central Logo Link */}
           <Link href="/" className={getLinkClasses("/")}>
             <span
               className={`flex items-center justify-center w-12 h-12 rounded-full transition ${
@@ -113,37 +114,101 @@ const Header = () => {
             <FaRegUser className="text-xl lg:text-2xl" />
             <span className="text-sm font-medium">Profile</span>
           </Link>
+
+
+                    {/* Pages Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setShowPages(!showPages)}
+              className="flex flex-col items-center text-white hover:text-red-500 transition"
+            >
+              <FaChevronDown className="text-xs mb-1" />
+              <span className="text-sm font-medium">Pages</span>
+            </button>
+
+            {showPages && (
+              <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg overflow-hidden z-50">
+                <Link
+                  href="/profile/About"
+                  className="block px-4 py-2 hover:bg-gray-100 text-gray-800"
+                  onClick={() => setShowPages(false)}
+                >
+                  About
+                </Link>
+                <Link
+                  href="/profile/Contact"
+                  className="block px-4 py-2 hover:bg-gray-100 text-gray-800"
+                  onClick={() => setShowPages(false)}
+                >
+                  Contact
+                </Link>
+                <Link
+                  href="/profile/Terms"
+                  className="block px-4 py-2 hover:bg-gray-100 text-gray-800"
+                  onClick={() => setShowPages(false)}
+                >
+                  Terms & Conditions
+                </Link>
+                <Link
+                  href="/profile/Privacy-Policy"
+                  className="block px-4 py-2 hover:bg-gray-100 text-gray-800"
+                  onClick={() => setShowPages(false)}
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  href="/profile/faqs"
+                  className="block px-4 py-2 hover:bg-gray-100 text-gray-800"
+                  onClick={() => setShowPages(false)}
+                >
+                  FAQs
+                </Link>
+              </div>
+            )}
+          </div>
         </nav>
 
-        {/* Auth Buttons */}
+        
+        {/* ✅ Auth Buttons */}
         <nav className="hidden md:block">
-          <ul className="flex space-x-2 lg:space-x-4">
-            <li>
-              <Link
-                href="/signin"
-                className={`px-2 py-2 lg:px-3 lg:py-2 rounded transition ${
-                  pathname === "/signin"
-                    ? "bg-red-600 text-white"
-                    : "bg-red-500 hover:bg-red-600 text-white"
-                }`}
-              >
-                Sign In
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/signup"
-                className={`px-2 py-2 lg:px-3 lg:py-2 rounded transition ${
-                  pathname === "/signup"
-                    ? "bg-red-600 text-white"
-                    : "bg-red-500 hover:bg-red-600 text-white"
-                }`}
-              >
-                Sign Up
-              </Link>
-            </li>
-          </ul>
+          {!user ? (
+            <ul className="flex space-x-2 lg:space-x-4">
+              <li>
+                <Link
+                  href="/signin"
+                  className={`px-2 py-2 lg:px-3 lg:py-2 rounded transition ${
+                    pathname === "/signin"
+                      ? "bg-red-600 text-white"
+                      : "bg-red-500 hover:bg-red-600 text-white"
+                  }`}
+                >
+                  Sign In
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/signup"
+                  className={`px-2 py-2 lg:px-3 lg:py-2 rounded transition ${
+                    pathname === "/signup"
+                      ? "bg-red-600 text-white"
+                      : "bg-red-500 hover:bg-red-600 text-white"
+                  }`}
+                >
+                  Sign Up
+                </Link>
+              </li>
+            </ul>
+          ) : (
+            <button
+              onClick={() => setShowLogoutModal(true)}
+              className="px-3 py-2 rounded font-semibold bg-red-600 text-white hover:bg-red-700 transition"
+            >
+              Logout
+            </button>
+          )}
         </nav>
+
+            
 
         {/* Mobile Menu Button */}
         <div className="md:hidden">
@@ -156,6 +221,13 @@ const Header = () => {
         </div>
       </div>
 
+
+        <LogoutModal
+                isOpen={showLogoutModal}
+                onClose={() => setShowLogoutModal(false)}
+                onConfirm={handleLogout}
+              />
+
       {/* Mobile Menu Component */}
       <MobileMenu isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </header>
@@ -163,3 +235,4 @@ const Header = () => {
 };
 
 export default Header;
+

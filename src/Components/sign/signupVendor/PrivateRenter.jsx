@@ -13,6 +13,7 @@ import { MdEmail } from "react-icons/md";
 import Button from "@/Components/ui/Button";
 import { useAuth } from "@/Contexts/AuthContext";
 import api from "@/lib/api";
+import Loader from "@/Components/ui/Loader";
 
 const PrivateRenter = () => {
   const { saveEmail } = useAuth();
@@ -23,6 +24,9 @@ const PrivateRenter = () => {
   const [fileSelected, setFileSelected] = useState(false);
   const fileInputRef = useRef(null);
   const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+
   // تحديث أي حقل
   const handleFieldChange = (field, value) => {
     dispatch({ type: "SET_FIELD", field, value });
@@ -46,11 +50,13 @@ const PrivateRenter = () => {
   // إرسال الفورم
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     // ✅ تحقق من الفالديشن
     const validationErrors = validate(state);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      setLoading(false);
       return;
     }
     setErrors({});
@@ -79,9 +85,14 @@ const PrivateRenter = () => {
         router.push(`/signup/verifycode`);
       } else {
         console.error("❌ Signup failed:", response.data);
+        setLoading(false);
       }
     } catch (err) {
       console.error("❌ Error:", err.response?.data || err);
+      setLoading(false);
+    }
+     finally {
+      setLoading(false);
     }
   };
 
@@ -212,7 +223,7 @@ const PrivateRenter = () => {
       </div>
 
       {/* Submit */}
-      <Button text="Sign Up" type="submit" className="font-medium" />
+      <Button text={loading ? <Loader /> : "Sign Up"} type="submit" className="font-medium" />
     </form>
   );
 };

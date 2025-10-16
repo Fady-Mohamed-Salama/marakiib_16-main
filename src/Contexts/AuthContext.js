@@ -1,5 +1,3 @@
-
-
 // "use client";
 // import React, { createContext, useContext, useState, useEffect } from "react";
 
@@ -69,12 +67,6 @@
 // };
 
 // export const useAuth = () => useContext(AuthContext);
-
-
-
-
-
-
 
 // "use client";
 // import React, { createContext, useContext, useState } from "react";
@@ -147,8 +139,6 @@
 
 // export const useAuth = () => useContext(AuthContext);
 
-
-
 // "use client";
 // import React, { createContext, useContext, useState, useEffect } from "react";
 
@@ -219,7 +209,6 @@
 
 // export const useAuth = () => useContext(AuthContext);
 
-
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
@@ -241,6 +230,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("role", roleData);
     localStorage.setItem("access_token", accessToken);
+  };
+  const saveEmail = (newEmail) => {
+    setEmail(newEmail);
+    localStorage.setItem("email", newEmail);
   };
 
   // 🟢 تسجيل الخروج
@@ -281,6 +274,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         setEmail,
         setotp_code,
+        saveEmail,
       }}
     >
       {children}

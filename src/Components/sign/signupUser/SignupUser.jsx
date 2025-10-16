@@ -15,16 +15,19 @@ import Link from "next/link";
 import BackArrow from "@/Components/BackArrow/BackArrow";
 import { useAuth } from "@/Contexts/AuthContext";
 import api from "@/lib/api";
+import Loader from "@/Components/ui/Loader";
 
 const SignupUser = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { saveEmail } = useAuth();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     // ✅ validation
     const validationErrors = validate(state);
@@ -63,6 +66,9 @@ const SignupUser = () => {
       }
     } catch (err) {
       console.error("🔥 Error:", err.response?.data || err.message);
+        setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -193,7 +199,12 @@ const SignupUser = () => {
           />
 
           {/* Submit */}
-          <Button text="Sign Up" type="submit" />
+
+          <Button
+            text={loading ? <Loader /> : "Sign Up"}
+            disabled={loading}
+            type="submit"
+          />
         </form>
 
         {/* Divider */}

@@ -13,11 +13,12 @@ import { useState, useRef, useEffect } from "react";
 import { FaLocationDot, FaHeart } from "react-icons/fa6";
 import { LuMessageCircleMore } from "react-icons/lu";
 import { useAuth } from "@/Contexts/AuthContext";
-import axios from "axios";
+// import axios from "axios";
 
 // 🟢 استيراد مكتبة الخرائط
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import Loader from "@/Components/ui/Loader";
+import api from "@/lib/api";
 
 const CarDetailsPage = () => {
   const { id } = useParams();
@@ -36,8 +37,8 @@ const CarDetailsPage = () => {
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const response = await axios.get(
-          `https://marakiib.com/api/public/cars/${id}`,
+        const response = await api.get(
+          `/public/cars/${id}`,
           {
             headers: {
               Accept: "application/json",

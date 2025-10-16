@@ -1,16 +1,14 @@
 
 "use client";
+import Loader from "@/Components/ui/Loader";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FaGasPump, FaUser } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
-import Loader from "./Loader";
+// import Loader from "./Loader";
+const GetCardsVendor = ({ car }) => {
+    const router = useRouter();
 
-export default function CarCard({ car }) {
-  const router = useRouter();
-  // console.log("Features:", car.features);
-
-  // console.log(car); // للتأكد من شكل البيانات
   const handleBooking = (e) => {
     e.preventDefault();
     router.push(`/booking-details/${car.id}`);
@@ -20,7 +18,7 @@ export default function CarCard({ car }) {
   const isLoading = !car.features;
 
   return (
-    <Link href={`/car-details/${car.id}`} className="block">
+        <Link href={`/car-details/${car.id}`} className="block">
       <div
         className="bg-white rounded-2xl p-4 flex flex-col shadow-sm
         border border-gray-100 hover:shadow-md transition-all duration-300
@@ -38,13 +36,11 @@ export default function CarCard({ car }) {
 
         {/* Image */}
         <div className="flex justify-center items-center mb-4">
-          {isLoading ? <Loader /> : (
-            <img
-              src={car.main_image}
-              alt={car.name}
-              className="w-full h-28 object-cover rounded-lg"
-            />
-          )}
+          <img
+            src={car.main_image}
+            alt={car.name}
+            className="w-full h-28 object-cover rounded-lg"
+          />
         </div>
 
         {/* Info */}
@@ -52,7 +48,7 @@ export default function CarCard({ car }) {
           {/* Fuel */}
           <span className="flex items-center gap-1">
             <FaGasPump className="text-gray-400" />
-          {isLoading ? <Loader /> : car.features.find((f) => f.feature_name === "Fuel Type")?.value || "N/A"}
+          {isLoading ? <Loader /> : car.features.find((f) => f.feature_name === "Fuel")?.value || "N/A"}
           </span>
 
           {/* Transmission */}
@@ -88,7 +84,7 @@ export default function CarCard({ car }) {
         </div>
       </div>
     </Link>
-  );
+  )
 }
 
-
+export default GetCardsVendor;

@@ -12,7 +12,9 @@ import ShowModal from "@/Components/Modals/ShowModal";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/Contexts/AuthContext";
 // import api from "@/Components/lib/api";
-import axios from "axios";
+// import axios from "axios";
+import api from "@/lib/api";
+import Loader from "@/Components/ui/Loader";
 
 const Signin = () => {
   // const { userType } = useUserType();
@@ -44,8 +46,8 @@ const Signin = () => {
     try {
       // const response = await api.post("/login", { ...formData, userType });
 
-      const response = await axios.post(
-        "https://marakiib.com/api/login",
+      const response = await api.post(
+        "/login",
         formData,
         {
           headers: { Accept: "application/json" },
@@ -72,7 +74,7 @@ const Signin = () => {
       }
     } catch (error) {
       console.error("Login error:", error);
-      alert("فشل تسجيل الدخول، تأكد من البيانات.");
+      setErrorMessage("فشل تسجيل الدخول، تأكد من البيانات.");
     } finally {
       setLoading(false);
     }
@@ -167,7 +169,7 @@ const Signin = () => {
 
           {/* Sign in button */}
           <Button
-            text={loading ? "Signing in..." : "Sign In"}
+            text={loading ? <Loader /> : "Sign In"}
             type="submit"
             disabled={loading}
             className="font-medium mt-4"

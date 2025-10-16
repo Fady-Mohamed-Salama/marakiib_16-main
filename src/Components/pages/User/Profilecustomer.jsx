@@ -2,20 +2,23 @@
 
 import { FaUserCircle } from "react-icons/fa";
 import React, { useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   MdOutlineAccountBalanceWallet,
   MdOutlinePrivacyTip,
-  MdHeadphones,
   MdOutlineLogout,
   MdKeyboardArrowRight,
   MdOutlineModeEdit,
+  MdQuestionAnswer,
+  MdInfoOutline,
+  MdGavel,
+  MdOutlineMailOutline,
+  MdHeadphones,
 } from "react-icons/md";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { CiGlobe } from "react-icons/ci";
 import { useAuth } from "@/Contexts/AuthContext";
-import LogoutModal from "@/Components/Modals/LogoutModal"; // 🟢 أنشئ الملف هنا
+import LogoutModal from "@/Components/Modals/LogoutModal";
 
 const SectionItem = ({ icon, title, onClick }) => (
   <div
@@ -50,9 +53,9 @@ export default function Profilecustomer() {
   }
 
   const handleLogout = () => {
-    logout(); // 🟢 من Context
+    logout();
     setShowLogoutModal(false);
-    router.push("/signin"); // 🟢 بعد تسجيل الخروج يروح للصفحة دي
+    router.push("/signin");
   };
 
   return (
@@ -104,9 +107,9 @@ export default function Profilecustomer() {
               onClick={() => router.push("/profile/Favorite-Cars")}
             />
             <SectionItem
-              onClick={() => router.push("/profile/E-Wallet")}
               icon={<MdOutlineAccountBalanceWallet />}
               title="E-Wallet"
+              onClick={() => router.push("/profile/E-Wallet")}
             />
           </div>
         </div>
@@ -120,11 +123,42 @@ export default function Profilecustomer() {
               title="Languages"
               onClick={() => router.push("/profile/Languages")}
             />
-            <SectionItem icon={<MdOutlinePrivacyTip />} title="Privacy Policy" />
             <SectionItem
               icon={<MdHeadphones />}
               title="Help Support"
               onClick={() => router.push("/profile/Help-Support")}
+            />
+          </div>
+        </div>
+
+        {/* Pages Section */}
+        <div className="mt-2 cursor-pointer">
+          <h4 className="text-black text-lg font-semibold">Pages</h4>
+          <div className="bg-white">
+            <SectionItem
+              icon={<MdOutlinePrivacyTip />}
+              title="Privacy Policy"
+              onClick={() => router.push("/profile/Privacy-Policy")}
+            />
+            <SectionItem
+              icon={<MdGavel />}
+              title="Terms & Conditions"
+              onClick={() => router.push("/profile/Terms")}
+            />
+            <SectionItem
+              icon={<MdInfoOutline />}
+              title="About"
+              onClick={() => router.push("/profile/About")}
+            />
+            <SectionItem
+              icon={<MdOutlineMailOutline />}
+              title="Contact"
+              onClick={() => router.push("/profile/Contact")}
+            />
+            <SectionItem
+              icon={<MdQuestionAnswer />}
+              title="FAQs"
+              onClick={() => router.push("/profile/faqs")}
             />
             <SectionItem
               icon={<MdOutlineLogout />}

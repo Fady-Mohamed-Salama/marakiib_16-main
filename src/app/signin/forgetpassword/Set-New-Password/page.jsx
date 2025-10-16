@@ -4,8 +4,9 @@ import { useRouter } from "next/navigation";
 import BackArrow from "@/Components/BackArrow/BackArrow";
 import Button from "@/Components/ui/Button";
 import { useAuth } from "@/Contexts/AuthContext";
-import axios from "axios";
+// import axios from "axios";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import api from "@/lib/api";
 
 const Resetpassword = () => {
   const [password, setNewpassword] = useState("");
@@ -59,8 +60,8 @@ const Resetpassword = () => {
     setSuccess("");
 
     try {
-      const response = await axios.post(
-        "https://marakiib.com/api/reset-password",
+      const response = await api.post(
+        "/reset-password",
         {
           email,
           otp_code: code.join(""),
