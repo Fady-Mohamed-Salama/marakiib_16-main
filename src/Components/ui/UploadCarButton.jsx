@@ -5,7 +5,7 @@ import { MdOutlineCloudUpload } from "react-icons/md";
 
 const UploadCarButton = () => {
   return (
-    <div className="fixed bottom-16 left-1/2 -translate-x-1/2 z-50  w-[90%] max-w-[450px]">
+    <div className="fixed bottom-16 left-1/2 -translate-x-1/2 z-20  w-[90%] max-w-[450px]">
       <Link
         href="/upload-car"
         className="flex items-center bg-gray-50 justify-center gap-2 

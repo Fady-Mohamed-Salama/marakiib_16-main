@@ -13,6 +13,7 @@ import { useAuth } from "@/Contexts/AuthContext";
 const UploadCarPage = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { access_token } = useAuth();
+  // console.log(access_token);
   // console.log("Access Token:", access_token);
   const [mainImagePreview, setMainImagePreview] = useState(null);
   const [extraImagesPreviews, setExtraImagesPreviews] = useState([]);
@@ -103,9 +104,9 @@ const UploadCarPage = () => {
     formData.append("name[en]", state.name);
     formData.append("name[ar]", state.name);
     formData.append("slug", state.name);
-    formData.append("color", state.color);
-    formData.append("engine_type", state.engine_type);
-    formData.append("model", state.model);
+    // formData.append("color", state.color);
+    // formData.append("engine_type", state.engine_type);
+    // formData.append("model", state.model);
     formData.append("rental_price", state.rental_price);
     formData.append(
       "long_term_guarantee",
@@ -123,7 +124,7 @@ const UploadCarPage = () => {
     featureValueIds.forEach((id) => formData.append("feature_value_ids[]", id));
     formData.append("meta_description[en]", state.description);
     formData.append("meta_description[ar]", state.description);
-    formData.append("car_type_id", state.car_type_id);
+    // formData.append("car_type_id", state.car_type_id);
     formData.append("plate_type", state.plate_type);
 
     categoryIds.forEach((id) => formData.append("category_ids[]", id));
@@ -292,7 +293,7 @@ const UploadCarPage = () => {
               }
               className="w-full border border-gray-600 rounded-lg p-3 font-semibold outline-none placeholder:text-black placeholder:font-semibold"
             />
-            <input
+            {/* <input
               type="text"
               value={state.model}
               onChange={(e) =>
@@ -300,7 +301,7 @@ const UploadCarPage = () => {
               }
               placeholder="Car Model"
               className="w-full border border-gray-600 rounded-lg p-3 font-semibold outline-none placeholder:text-black placeholder:font-semibold"
-            />
+            /> */}
           </section>
 
           {/* Car Features */}
@@ -535,9 +536,9 @@ const UploadCarPage = () => {
               <option value="" disabled hidden>
                 Plate Type
               </option>
-              <option value="Private">Private</option>
-              <option value="Commercial">Commercial</option>
-              <option value="Government">Government</option>
+              <option value="green">green</option>
+              <option value="white">white</option>
+              
             </select>
             <select
               value={state.insurance_type}

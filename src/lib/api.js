@@ -8,7 +8,7 @@
 
 import axios from "axios";
 const api = axios.create({
-  baseURL: "https://api.marakiib.com/api",
+  baseURL: "http://marakiib.com/api",
 });
 export default api;
 

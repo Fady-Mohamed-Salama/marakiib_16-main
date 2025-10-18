@@ -35,8 +35,8 @@ export function reducer(state, action) {
       return { ...state, name: action.payload };
     case "SET_NAME_AR":
       return { ...state, nameAr: action.payload };
-    case "SET_MODEL":
-      return { ...state, model: action.payload };
+    // case "SET_MODEL":
+    //   return { ...state, model: action.payload };
     case "SET_COLOR":
       return { ...state, color: action.payload };
     case "SET_ENGINE_TYPE":

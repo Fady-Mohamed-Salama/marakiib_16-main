@@ -42,11 +42,11 @@
 //   return (
 //     <div className="bg-white py-6">
 
-        // {cars.map((car) => (
-        //   <div key={car.id}>
-        //     <GetCardsVendor car={car} />
-        //   </div>
-        // ))}
+// {cars.map((car) => (
+//   <div key={car.id}>
+//     <GetCardsVendor car={car} />
+//   </div>
+// ))}
 
 //     </div>
 //   );
@@ -108,8 +108,6 @@
 
 // export default GitUploadCars;
 
-
-
 "use client";
 
 import Loader from "@/Components/ui/Loader";
@@ -124,6 +122,7 @@ const GitUploadCars = () => {
   const { access_token } = useAuth();
 
   useEffect(() => {
+    if (!access_token) return;
     const fetchCars = async () => {
       try {
         const response = await api.get("/my-cars", {
@@ -163,7 +162,15 @@ const GitUploadCars = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="bg-white py-6">
+    <div
+      className="
+            grid gap-6 
+            grid-cols-1
+            sm:grid-cols-2
+            lg:grid-cols-3
+            px-4 sm:px-8 lg:px-16
+          "
+    >
       {cars.length > 0 ? (
         cars.map((car) => (
           <div key={car.id}>
