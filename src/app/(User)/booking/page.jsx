@@ -3,7 +3,14 @@ import React from 'react'
 
 const BookingPage = () => {
   return (
-    <main><BookingCar /></main>
+    <main>
+      
+      <BookingCar />
+{/* 
+      <div>
+        <BookingVendor />
+      </div> */}
+    </main>
   )
 }
 

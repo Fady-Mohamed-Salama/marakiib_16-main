@@ -8,6 +8,7 @@ import api from "@/lib/api";
 import { initialState, reducer } from "./ReducerUplodcar";
 import { FaRegCalendar } from "react-icons/fa6";
 import { useAuth } from "@/Contexts/AuthContext";
+import { useRouter } from "next/navigation";
 // import axios from "axios";
 
 const UploadCarPage = () => {
@@ -19,6 +20,8 @@ const UploadCarPage = () => {
   const [extraImagesPreviews, setExtraImagesPreviews] = useState([]);
 
   const [categories, setCategories] = useState([]);
+
+  const router = useRouter();
 
   const mainInputRef = useRef(null);
   const extraInputRef = useRef(null);
@@ -150,27 +153,29 @@ const UploadCarPage = () => {
       formData.append(`extra_images[${index}]`, file);
     });
 
-    for (let [key, value] of formData.entries()) {
-      if (value instanceof File) {
-        console.log(`${key}: File -> ${value.name}`);
-      } else {
-        console.log(`${key}:`, value);
-      }
-    }
+    // for (let [key, value] of formData.entries()) {
+    //   if (value instanceof File) {
+    //     console.log(`${key}: File -> ${value.name}`);
+    //   } else {
+    //     console.log(`${key}:`, value);
+    //   }
+    // }
 
     try {
-      const response = await api.post(
-        "/cars",
-        formData,
-        {
-          headers: {
-            Accept: "application/json",
-            // احذف السطر ده: "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
+      const response = await api.post("/cars", formData, {
+        headers: {
+          Accept: "application/json",
+          // احذف السطر ده: "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
       console.log("Upload successful:", response.data);
+      // ✅ تفريغ الفورم بعد النجاح
+      dispatch({ type: "RESET" });
+      setMainImagePreview(null);
+      setExtraImagesPreviews([]);
+      // بعد الرفع الناجح، اعادة التوجيه لصفحة أخرى مثلاً صفحة السيارات الخاصة بالبائع
+      router.push("/");
     } catch (error) {
       console.error("Error uploading car:", error);
       // أضف لوگ إضافي للتشخيص
@@ -538,7 +543,6 @@ const UploadCarPage = () => {
               </option>
               <option value="green">green</option>
               <option value="white">white</option>
-              
             </select>
             <select
               value={state.insurance_type}

@@ -1,8 +1,6 @@
-
 "use client";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { FaCogs, FaStar } from "react-icons/fa";
-import Image from "next/image";
 import BackArrow from "@/Components/BackArrow/BackArrow";
 import { FiHeart } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,30 +9,21 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { useState, useRef, useEffect } from "react";
 import { FaLocationDot, FaHeart } from "react-icons/fa6";
-import { LuMessageCircleMore } from "react-icons/lu";
 import { useAuth } from "@/Contexts/AuthContext";
-// import axios from "axios";
+
 
 // 🟢 استيراد مكتبة الخرائط
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import Loader from "@/Components/ui/Loader";
 import api from "@/lib/api";
 
-const CarDetailsPage = () => {
+const CarDetailsVendor = () => {
   const { id } = useParams();
   const [car, setCar] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [liked, setLiked] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const swiperRef = useRef(null);
   const { access_token } = useAuth();
-
-      const router = useRouter();
-  
-    const handleBooking = (e) => {
-      e.preventDefault();
-      router.push(`/booking-details/${car.id}`);
-    };
 
   // 🟢 تحميل Google Maps API
   const { isLoaded } = useJsApiLoader({
@@ -44,17 +33,14 @@ const CarDetailsPage = () => {
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const response = await api.get(
-          `/public/cars/${id}`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              "Accept-Language": "en",
-              Authorization: `Bearer ${access_token}`,
-            },
-          }
-        );
+        const response = await api.get(`/public/cars/${id}`, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "Accept-Language": "en",
+            Authorization: `Bearer ${access_token}`,
+          },
+        });
         console.log("Car detail response:", response.data);
         setCar(response.data.data);
       } catch (error) {
@@ -67,7 +53,7 @@ const CarDetailsPage = () => {
     if (id) fetchCar();
   }, [id]);
 
-  if (loading) return <div className="text-center py-10">Loading...</div>;
+  if (loading) return <Loader />;
   if (!car)
     return <div className="text-center py-10 text-red-500">Car not found</div>;
 
@@ -93,16 +79,7 @@ const CarDetailsPage = () => {
           <BackArrow />
         </div>
 
-        <div
-          onClick={() => setLiked(!liked)}
-          className="bg-white flex items-center justify-center border border-gray-50 shadow rounded-md w-10 h-10 cursor-pointer transition-colors duration-300"
-        >
-          {liked ? (
-            <FaHeart className="text-2xl text-red-500" />
-          ) : (
-            <FiHeart className="text-2xl text-red-500 hover:fill-red-500" />
-          )}
-        </div>
+
       </div>
 
       {/* السلايدر */}
@@ -172,7 +149,6 @@ const CarDetailsPage = () => {
           <div>
             <h1 className="text-xl md:text-2xl font-bold">{car.name}</h1>
             <p className="text-gray-500 text-sm mt-1">{car.description}</p>
-            <p className="text-gray-500 text-sm mt-1">Model: {car.model}</p>
           </div>
           <div className="flex items-center justify-center">
             <span className="px-3 py-2 rounded-full bg-green-300 text-green-800 text-xs font-semibold">
@@ -181,28 +157,7 @@ const CarDetailsPage = () => {
           </div>
         </div>
 
-        {/* صاحب العربية */}
-        <div className="flex justify-between items-center py-3 border-b border-gray-300">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-full bg-purple-200 flex items-center justify-center">
-              {car.user?.avatar ? (
-                <Image
-                  src={car.user.avatar}
-                  alt={car.user.name}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-              ) : (
-                <span className="text-sm font-bold">{car.user?.name?.[0]}</span>
-              )}
-            </div>
-            <p className="font-semibold">{car.user?.name}</p>
-          </div>
-          <button className="w-9 h-9 rounded-full border border-red-600 flex items-center justify-center text-xl text-red-600">
-            <LuMessageCircleMore />
-          </button>
-        </div>
+
 
         {/* location */}
         <div className="flex flex-col gap-2 text-sm text-gray-700 py-6 border-b border-gray-300">
@@ -296,7 +251,9 @@ const CarDetailsPage = () => {
                 <Marker position={center} />
               </GoogleMap>
             ) : (
-              <p><Loader /></p>
+              <p>
+                <Loader />
+              </p>
             )}
           </div>
         </div>
@@ -307,13 +264,26 @@ const CarDetailsPage = () => {
             ${car.rental_price}
             <span className="text-gray-600 text-sm">/Day</span>
           </p>
-          <button onClick={handleBooking} className="bg-red-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-red-700">
-            Rent Now
-          </button>
+
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={() => console.log("Edit car", car.id)}
+              className="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700"
+            >
+              Edit Car
+            </button>
+
+            <button
+              onClick={() => console.log("Delete car", car.id)}
+              className="bg-red-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-red-700"
+            >
+              Delete Car
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default CarDetailsPage;
+export default CarDetailsVendor;
