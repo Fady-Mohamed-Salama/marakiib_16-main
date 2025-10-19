@@ -14,10 +14,15 @@ const Home = () => {
       {role === "customer" && <HomeCustomer />}
       {role === "private_renter" && <HomeVendor />}
       {role === "rental_office" && <HomeVendor />}
+
+         {/* 🟢 لو مش أي واحدة من دول، يعرض HomeGuast */}
+      {!["customer", "private_renter", "rental_office"].includes(role) && (
+        <HomeGuast />
+      )}
     
 
       {/* fallback لو الرول مش معروف */}
-      {role === "user"  && <HomeGuast />}
+      {/* {role === "user"  && <HomeGuast />} */}
     </main>
   );
 
