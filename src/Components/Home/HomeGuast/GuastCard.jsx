@@ -1,5 +1,5 @@
-
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FaGasPump, FaUser } from "react-icons/fa";
@@ -16,8 +16,6 @@ export default function GuastCard({ car }) {
     router.push(`/booking-details/${car.id}`);
   };
 
-  // لو الـ features لسه مش جاية
-  // const isLoading = !car.features;
 
   return (
     <Link href={`/car-details/${car.id}`} className="block">
@@ -38,13 +36,14 @@ export default function GuastCard({ car }) {
 
         {/* Image */}
         <div className="flex justify-center items-center mb-4">
-          
-            <img
+          <div className="relative w-full h-32 sm:h-40">
+            <Image
               src={car.main_image}
-              alt={car.name}
-              className="w-full h-28 object-cover rounded-lg"
+              alt={car.name || "Car image"}
+              fill
+              className="object-contain rounded-lg" // بدل object-cover
             />
-          
+          </div>
         </div>
 
         {/* Info */}
@@ -52,19 +51,22 @@ export default function GuastCard({ car }) {
           {/* Fuel */}
           <span className="flex items-center gap-1">
             <FaGasPump className="text-gray-400" />
-          { car.features.find((f) => f.feature_name === "Fuel Type")?.value || "N/A"}
+            {car.features.find((f) => f.feature_name === "Fuel Type")?.value ||
+              "N/A"}
           </span>
 
           {/* Transmission */}
           <span className="flex items-center gap-1">
             <FaGear className="text-gray-400" />
-            { car.features.find((f) => f.feature_name === "Transmission")?.value || "N/A"}
+            {car.features.find((f) => f.feature_name === "Transmission")
+              ?.value || "N/A"}
           </span>
 
           {/* Seats */}
           <span className="flex items-center gap-1">
             <FaUser className="text-gray-400" />
-            { car.features.find((f) => f.feature_name === "Seats")?.value || "N/A"}{" "}
+            {car.features.find((f) => f.feature_name === "Seats")?.value ||
+              "N/A"}{" "}
             Seats
           </span>
         </div>
@@ -88,5 +90,3 @@ export default function GuastCard({ car }) {
     </Link>
   );
 }
-
-

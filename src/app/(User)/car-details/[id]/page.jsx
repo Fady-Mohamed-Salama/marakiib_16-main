@@ -1,20 +1,15 @@
-"use client"
+import React from "react";
+import CarDetailsPage from "./CarDetailsPage";
 
-import CarDetailsGuest from "@/Components/pages/User/CarDetailsGuest ";
-import CarDetailsPage from "@/Components/pages/User/CarDetailsPage";
-import CarDetailsVendor from "@/Components/pages/User/CarDetailsVendor";
-import { useAuth } from "@/Contexts/AuthContext";
-
+export const metadata = {
+  title: "Car Details",
+  description: "Car Details Page",
+};
 const CarDetails = () => {
-    const { role } = useAuth();
+
   return (
     <div>
-
-      {role === "user" &&  <CarDetailsGuest />}
-      {role === "customer" && <CarDetailsPage />}
-      {role === "private_renter" && <CarDetailsVendor />}
-      {role === "rental_office" && <CarDetailsVendor />}
-
+      <CarDetailsPage />
     </div>
   );
 };

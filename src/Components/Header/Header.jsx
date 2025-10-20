@@ -4,8 +4,8 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { LuMessageCircleMore } from "react-icons/lu";
 import { TbRoad } from "react-icons/tb";
-// import { HiOutlineBell } from "react-icons/hi2";
-import { FaChevronDown, FaRegUser } from "react-icons/fa6";
+import { HiOutlineBell } from "react-icons/hi2";
+import { FaRegUser } from "react-icons/fa6";
 import { FiMenu } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
 import MobileMenu from "../Modals/MobileMenu";
@@ -17,7 +17,7 @@ import LogoutModal from "../Modals/LogoutModal";
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-    const [showPages, setShowPages] = useState(false);
+    // const [showPages, setShowPages] = useState(false);
 
    const router = useRouter();
   const { user, logout } = useAuth(); // ✅ استدعاء الكونتكست
@@ -102,13 +102,13 @@ const Header = () => {
             </span>
           </Link>
 
-          {/* <Link
+          <Link
             href="/notification"
             className={getLinkClasses("/notification")}
           >
             <HiOutlineBell className="text-xl lg:text-2xl" />
             <span className="text-sm font-medium">Notification</span>
-          </Link> */}
+          </Link>
 
           <Link href="/profile" className={getLinkClasses("/profile")}>
             <FaRegUser className="text-xl lg:text-2xl" />
@@ -117,7 +117,7 @@ const Header = () => {
 
 
                     {/* Pages Dropdown */}
-          <div className="relative">
+          {/* <div className="relative">
             <button
               onClick={() => setShowPages(!showPages)}
               className="flex flex-col items-center text-white hover:text-red-500 transition"
@@ -165,7 +165,7 @@ const Header = () => {
                 </Link>
               </div>
             )}
-          </div>
+          </div> */}
         </nav>
 
         
