@@ -13,6 +13,7 @@ import MobileMenu from "../Modals/MobileMenu";
 import { usePathname, useRouter } from "next/navigation"; // ✅ هنحتاج useRouter
 import { useAuth } from "@/Contexts/AuthContext"; // ✅ استدعاء الكونتكست
 import LogoutModal from "../Modals/LogoutModal";
+import Image from "next/image";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,12 +46,14 @@ const Header = () => {
     <header className="bg-gray-950 px-2 md:px-1 sticky top-0 z-50">
       <div className="md:max-w-7xl mx-auto flex items-center justify-between h-[70px]">
         <Link href="/">
-          <img
-            src="/images/Logo.png"
-            className="h-32 w-auto"
-            alt="Marakiib Logo"
-          />
-        </Link>
+              <Image
+                src="/images/logo3png.png"
+                alt="Marakiib Logo"
+                width={120} // العرض
+                height={40} // الارتفاع
+                className="object-contain"
+              />
+            </Link>
 
         {/* Navigation Tabs */}
         <nav className="hidden md:flex justify-around items-center gap-6 lg:gap-10">

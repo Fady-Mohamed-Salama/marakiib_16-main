@@ -7,14 +7,19 @@ import { TbRoad } from "react-icons/tb";
 import { HiOutlineBell } from "react-icons/hi2";
 import { FaRegUser } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/Contexts/AuthContext";
-import { MdGavel, MdHelpOutline, MdInfoOutline, MdOutlineMailOutline, MdPrivacyTip } from "react-icons/md";
+// import { MdGavel, MdHelpOutline, MdInfoOutline, MdOutlineMailOutline, MdPrivacyTip } from "react-icons/md";
+import LogoutModal from "./LogoutModal";
+import { useState } from "react";
 // import { useAuth } from "@/Contexts/AuthContext";
 
 const MobileMenu = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth(); 
   const pathname = usePathname();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const router = useRouter();
+  
   if (!isOpen) return null;
 
   // دالة ترجع الكلاسات حسب الصفحة الحالية
@@ -23,6 +28,12 @@ const MobileMenu = ({ isOpen, onClose }) => {
     return `flex items-center gap-2 transition ${
       isActive ? "text-red-500" : "text-white hover:text-red-500"
     }`;
+  };
+
+    const handleLogout = () => {
+    logout(); // 🟢 من Context
+    setShowLogoutModal(false);
+    router.push("/signin"); // 🟢 بعد تسجيل الخروج يروح للصفحة دي
   };
 
   return (
@@ -68,7 +79,8 @@ const MobileMenu = ({ isOpen, onClose }) => {
             Profile
           </Link>
         </li>
-        <li className="border-b border-b-white pb-2">
+        {/* ///////////////// */}
+        {/* <li className="border-b border-b-white pb-2">
           <Link
             href="/profile/About"
             className={getLinkClasses("/profile/About")}
@@ -118,7 +130,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
             <MdHelpOutline className="text-xl" />
             FAQ
           </Link>
-        </li>
+        </li> */}
       </ul>
 
       {/* ✅ الجزء الخاص بتسجيل الدخول / الخروج */}
@@ -137,7 +149,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
               Sign In
             </Link>
 
-            <Link
+            {/* <Link
               href="/signup"
               className={`px-3 py-2 rounded text-center transition ${
                 pathname === "/signup"
@@ -147,20 +159,23 @@ const MobileMenu = ({ isOpen, onClose }) => {
               onClick={onClose}
             >
               Sign Up
-            </Link>
+            </Link> */}
           </>
         ) : (
-          <button
-            onClick={() => {
-              logout(); // ✅ تسجيل الخروج
-              onClose(); // غلق القائمة
-            }}
-            className="px-3 py-2 rounded bg-red-600 text-white hover:bg-red-700 transition"
-          >
-            Logout
-          </button>
+              <button
+              onClick={() => setShowLogoutModal(true)}
+              className="px-3 py-2 rounded font-semibold bg-red-600 text-white hover:bg-red-700 transition"
+            >
+              Logout
+            </button>
         )}
       </div>
+
+            <LogoutModal
+              isOpen={showLogoutModal}
+              onClose={() => setShowLogoutModal(false)}
+              onConfirm={handleLogout}
+            />
 
 
     </div>

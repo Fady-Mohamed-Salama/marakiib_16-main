@@ -13,12 +13,13 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         {/* 🟢 العمود الأول */}
         <div>
-          <div className="relative w-40 h-10 mb-4">
+            <div className="mb-4">
             <Link href="/">
               <Image
                 src="/images/logo3png.png"
                 alt="Marakiib Logo"
-                fill
+                width={160} // العرض
+                height={40} // الارتفاع
                 className="object-contain"
               />
             </Link>

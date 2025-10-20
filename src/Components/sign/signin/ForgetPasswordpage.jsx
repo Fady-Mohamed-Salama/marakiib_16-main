@@ -33,7 +33,7 @@ const ForgetPasswordpage = () => {
   };
 
   return (
-    <div className="pt-10 flex items-center justify-center px-2">
+    <div className="pt-10 flex items-center justify-center px-2 mb-80">
       <div className="w-full bg-white">
         <BackArrow />
         <h2 className="text-2xl font-bold text-center text-red-600">

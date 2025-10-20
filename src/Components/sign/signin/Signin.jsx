@@ -81,7 +81,7 @@ const Signin = () => {
   };
 
   return (
-    <div className="pt-4 flex items-center justify-center px-4">
+    <div className="pt-4 flex items-center justify-center px-4 mb-24">
       <div className="w-full bg-white">
         {/* Back Arrow */}
         <BackArrow />

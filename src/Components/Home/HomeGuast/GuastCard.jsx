@@ -16,7 +16,6 @@ export default function GuastCard({ car }) {
     router.push(`/booking-details/${car.id}`);
   };
 
-
   return (
     <Link href={`/car-details/${car.id}`} className="block">
       <div
@@ -35,13 +34,24 @@ export default function GuastCard({ car }) {
         </div>
 
         {/* Image */}
-        <div className="flex justify-center items-center mb-4">
+        {/* <div className="flex justify-center items-center mb-4">
           <div className="relative w-full h-32 sm:h-40">
             <Image
               src={car.main_image}
               alt={car.name || "Car image"}
               fill
               className="object-contain rounded-lg" // بدل object-cover
+            />
+          </div>
+        </div> */}
+        <div className="flex justify-center items-center mb-4">
+          <div className="relative w-full h-32 sm:h-40">
+            <Image
+              src={car.main_image}
+              alt={car.name || "Car image"}
+              fill
+              className="object-contain rounded-lg"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           </div>
         </div>

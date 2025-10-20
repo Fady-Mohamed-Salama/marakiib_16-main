@@ -3,7 +3,7 @@ import "./globals.css";
 import Header from "@/Components/Header/Header";
 import { UserTypeProvider } from "@/Contexts/UserTypeContext";
 import Footer from "@/Components/Footer/Footer";
-import Providers from "@/Redux/providers";
+
 import { AuthProvider } from "@/Contexts/AuthContext";
 
 const montserrat = Montserrat({
@@ -21,6 +21,9 @@ const montserrat = Montserrat({
 export const metadata = {
   title: "Marakiib",
   description: "Marakiib - Car Rental Platform",
+  icons: {
+    icon: "/images/logo4.png", // أو "/favicon.png"
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -30,10 +33,8 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <UserTypeProvider>
             <Header />
-            <main className="flex-1">
-              <Providers>{children}</Providers>
-            </main>
-            <Footer />
+            <main className="flex-1">{children}</main>
+            <Footer className="mt-auto" />
           </UserTypeProvider>
         </AuthProvider>
       </body>
