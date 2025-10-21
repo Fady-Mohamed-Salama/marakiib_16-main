@@ -1,7 +1,6 @@
-
 "use client";
 import { useParams, useRouter } from "next/navigation";
-import { FaCogs, FaStar } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 import Image from "next/image";
 import BackArrow from "@/Components/BackArrow/BackArrow";
 import { FiHeart } from "react-icons/fi";
@@ -13,12 +12,16 @@ import { useState, useRef, useEffect } from "react";
 import { FaLocationDot, FaHeart } from "react-icons/fa6";
 import { LuMessageCircleMore } from "react-icons/lu";
 import { useAuth } from "@/Contexts/AuthContext";
-// import axios from "axios";
 
 // 🟢 استيراد مكتبة الخرائط
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import Loader from "@/Components/ui/Loader";
+import {
+  GoogleMap,
+  Marker,
+  useJsApiLoader,
+  DirectionsRenderer,
+} from "@react-google-maps/api";
 import api from "@/lib/api";
+import Loader from "@/Components/ui/Loader";
 
 const CarDetailscustomer = () => {
   const { id } = useParams();
@@ -27,14 +30,14 @@ const CarDetailscustomer = () => {
   const [liked, setLiked] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const swiperRef = useRef(null);
-  const { access_token } = useAuth();
+  const { access_token, location } = useAuth();
+  const router = useRouter();
+  const [directions, setDirections] = useState(null);
 
-      const router = useRouter();
-  
-    const handleBooking = (e) => {
-      e.preventDefault();
-      router.push(`/booking-details/${car.id}`);
-    };
+  const handleBooking = (e) => {
+    e.preventDefault();
+    router.push(`/booking-details/${car.id}`);
+  };
 
   // 🟢 تحميل Google Maps API
   const { isLoaded } = useJsApiLoader({
@@ -44,17 +47,14 @@ const CarDetailscustomer = () => {
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const response = await api.get(
-          `/public/cars/${id}`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              "Accept-Language": "en",
-              Authorization: `Bearer ${access_token}`,
-            },
-          }
-        );
+        const response = await api.get(`/public/cars/${id}`, {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "Accept-Language": "en",
+            Authorization: `Bearer ${access_token}`,
+          },
+        });
         console.log("Car detail response:", response.data);
         setCar(response.data.data);
       } catch (error) {
@@ -67,7 +67,39 @@ const CarDetailscustomer = () => {
     if (id) fetchCar();
   }, [id]);
 
-  if (loading) return <div className="text-center py-10">Loading...</div>;
+  useEffect(() => {
+    if (!isLoaded || !location || !car?.latitude || !car?.longitude) return;
+
+    const directionsService = new window.google.maps.DirectionsService();
+
+    directionsService.route(
+      {
+        origin: {
+          lat: location.latitude,
+          lng: location.longitude,
+        },
+        destination: {
+          lat: parseFloat(car.latitude),
+          lng: parseFloat(car.longitude),
+        },
+        travelMode: window.google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        if (status === "OK") {
+          setDirections(result);
+        } else {
+          console.error("Directions request failed:", status);
+        }
+      }
+    );
+  }, [isLoaded, location, car]);
+
+  if (loading)
+    return (
+      <div className="text-center py-10">
+        <Loader />
+      </div>
+    );
   if (!car)
     return <div className="text-center py-10 text-red-500">Car not found</div>;
 
@@ -180,7 +212,6 @@ const CarDetailscustomer = () => {
             </span>
           </div>
         </div>
-
         {/* صاحب العربية */}
         <div className="flex justify-between items-center py-3 border-b border-gray-300">
           <div className="flex items-center gap-2">
@@ -203,7 +234,6 @@ const CarDetailscustomer = () => {
             <LuMessageCircleMore />
           </button>
         </div>
-
         {/* location */}
         <div className="flex flex-col gap-2 text-sm text-gray-700 py-6 border-b border-gray-300">
           <div className="flex items-center gap-2">
@@ -213,7 +243,6 @@ const CarDetailscustomer = () => {
             <p>{car.user?.address || "No address provided"}</p>
           </div>
         </div>
-
         {/* الخصائص */}
         <div className="mt-4">
           <h2 className="text-lg font-semibold mb-3">Car Features</h2>
@@ -233,7 +262,6 @@ const CarDetailscustomer = () => {
             ))}
           </div>
         </div>
-
         {/* Reviews */}
         <div className="mt-6">
           <div className="flex justify-between items-center mb-3">
@@ -282,7 +310,6 @@ const CarDetailscustomer = () => {
             </div>
           )}
         </div>
-
         {/* 🟢 الخريطة */}
         <div className="mt-6">
           <h2 className="text-lg font-semibold mb-3">Car Location</h2>
@@ -290,24 +317,62 @@ const CarDetailscustomer = () => {
             {isLoaded ? (
               <GoogleMap
                 mapContainerStyle={containerStyle}
-                center={center}
-                zoom={14}
+                zoom={13}
+                onLoad={(map) => {
+                  if (location && car.latitude && car.longitude) {
+                    const bounds = new window.google.maps.LatLngBounds();
+                    bounds.extend({
+                      lat: parseFloat(car.latitude),
+                      lng: parseFloat(car.longitude),
+                    });
+                    bounds.extend({
+                      lat: location.latitude,
+                      lng: location.longitude,
+                    });
+                    map.fitBounds(bounds);
+                  }
+                }}
               >
-                <Marker position={center} />
+                {/* Marker السيارة */}
+                <Marker
+                  position={{
+                    lat: parseFloat(car.latitude),
+                    lng: parseFloat(car.longitude),
+                  }}
+                  label="🚗"
+                />
+
+                {/* Marker المستخدم */}
+                {location && (
+                  <Marker
+                    position={{
+                      lat: location.latitude,
+                      lng: location.longitude,
+                    }}
+                    label="📍"
+                  />
+                )}
+
+                {/* الخط بين النقطتين */}
+                {directions && <DirectionsRenderer directions={directions} />}
               </GoogleMap>
             ) : (
-              <p><Loader /></p>
+              <p>
+                <Loader />
+              </p>
             )}
           </div>
         </div>
-
         {/* السعر */}
         <div className="flex justify-between items-center mt-8 pt-4">
           <p className="text-xl font-bold">
             ${car.rental_price}
             <span className="text-gray-600 text-sm">/Day</span>
           </p>
-          <button onClick={handleBooking} className="bg-red-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-red-700">
+          <button
+            onClick={handleBooking}
+            className="bg-red-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-red-700"
+          >
             Rent Now
           </button>
         </div>

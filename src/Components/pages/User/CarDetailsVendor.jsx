@@ -1,19 +1,22 @@
 "use client";
 import { useParams } from "next/navigation";
-import { FaCogs, FaStar } from "react-icons/fa";
+import {  FaStar } from "react-icons/fa";
 import BackArrow from "@/Components/BackArrow/BackArrow";
-import { FiHeart } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import { useState, useRef, useEffect } from "react";
-import { FaLocationDot, FaHeart } from "react-icons/fa6";
+import { FaLocationDot} from "react-icons/fa6";
 import { useAuth } from "@/Contexts/AuthContext";
 
-
 // 🟢 استيراد مكتبة الخرائط
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  Marker,
+  useJsApiLoader,
+  DirectionsRenderer,
+} from "@react-google-maps/api";
 import Loader from "@/Components/ui/Loader";
 import api from "@/lib/api";
 
@@ -23,7 +26,8 @@ const CarDetailsVendor = () => {
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const swiperRef = useRef(null);
-  const { access_token } = useAuth();
+  const { access_token, location } = useAuth();
+  const [directions, setDirections] = useState(null);
 
   // 🟢 تحميل Google Maps API
   const { isLoaded } = useJsApiLoader({
@@ -53,6 +57,33 @@ const CarDetailsVendor = () => {
     if (id) fetchCar();
   }, [id]);
 
+  useEffect(() => {
+    if (!isLoaded || !location || !car?.latitude || !car?.longitude) return;
+
+    const directionsService = new window.google.maps.DirectionsService();
+
+    directionsService.route(
+      {
+        origin: {
+          lat: location.latitude,
+          lng: location.longitude,
+        },
+        destination: {
+          lat: parseFloat(car.latitude),
+          lng: parseFloat(car.longitude),
+        },
+        travelMode: window.google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        if (status === "OK") {
+          setDirections(result);
+        } else {
+          console.error("Directions request failed:", status);
+        }
+      }
+    );
+  }, [isLoaded, location, car]);
+
   if (loading) return <Loader />;
   if (!car)
     return <div className="text-center py-10 text-red-500">Car not found</div>;
@@ -78,8 +109,6 @@ const CarDetailsVendor = () => {
         <div className="bg-white flex items-center justify-center pt-1 border border-gray-50 shadow rounded-md w-10 h-10 cursor-pointer">
           <BackArrow />
         </div>
-
-
       </div>
 
       {/* السلايدر */}
@@ -156,8 +185,6 @@ const CarDetailsVendor = () => {
             </span>
           </div>
         </div>
-
-
 
         {/* location */}
         <div className="flex flex-col gap-2 text-sm text-gray-700 py-6 border-b border-gray-300">
@@ -245,10 +272,44 @@ const CarDetailsVendor = () => {
             {isLoaded ? (
               <GoogleMap
                 mapContainerStyle={containerStyle}
-                center={center}
-                zoom={14}
+                zoom={13}
+                onLoad={(map) => {
+                  if (location && car.latitude && car.longitude) {
+                    const bounds = new window.google.maps.LatLngBounds();
+                    bounds.extend({
+                      lat: parseFloat(car.latitude),
+                      lng: parseFloat(car.longitude),
+                    });
+                    bounds.extend({
+                      lat: location.latitude,
+                      lng: location.longitude,
+                    });
+                    map.fitBounds(bounds);
+                  }
+                }}
               >
-                <Marker position={center} />
+                {/* Marker السيارة */}
+                <Marker
+                  position={{
+                    lat: parseFloat(car.latitude),
+                    lng: parseFloat(car.longitude),
+                  }}
+                  label="🚗"
+                />
+
+                {/* Marker المستخدم */}
+                {location && (
+                  <Marker
+                    position={{
+                      lat: location.latitude,
+                      lng: location.longitude,
+                    }}
+                    label="📍"
+                  />
+                )}
+
+                {/* الخط بين النقطتين */}
+                {directions && <DirectionsRenderer directions={directions} />}
               </GoogleMap>
             ) : (
               <p>

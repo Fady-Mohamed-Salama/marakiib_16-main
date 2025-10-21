@@ -1,10 +1,10 @@
-
 "use client";
 import BackArrow from "@/Components/BackArrow/BackArrow";
 import CardBooking from "@/Components/ui/CardBooking";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/Contexts/AuthContext";
 import api from "@/lib/api";
+import Loader from "@/Components/ui/Loader";
 
 const BookingCar = () => {
   const [bookings, setBookings] = useState([]);
@@ -37,17 +37,22 @@ const BookingCar = () => {
 
   const handleCancel = async (id) => {
     try {
-      await api.post(`/bookings/${id}/cancel`, {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${access_token}`, // خزن التوكن عندك
-          "Accept-Language": "en",
-        },
-      });
-      fetchBookings();
+      await api.post(
+        `/bookings/${id}/cancel`,
+        {}, // لو مفيش بيانات تبعتها في البودي، حط object فاضي
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access_token}`,
+            "Accept-Language": "en",
+          },
+        }
+      );
+
+      fetchBookings(); // بعد الإلغاء حدّث القائمة
     } catch (error) {
-      console.error("Error cancelling booking:", error);
+      console.error("Error cancelling booking:", error.response?.data || error);
     }
   };
 
@@ -57,7 +62,9 @@ const BookingCar = () => {
       <h1 className="text-2xl font-bold mb-4 text-center">My Booking</h1>
 
       {loading ? (
-        <p className="text-center">Loading bookings...</p>
+        <div className="flex justify-center items-center text-center">
+          <Loader />
+        </div>
       ) : bookings.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {bookings.map((car) => (

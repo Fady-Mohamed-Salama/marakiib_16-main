@@ -43,7 +43,7 @@ const Header = () => {
 
 
   return (
-    <header className="bg-gray-950 px-2 md:px-1 sticky top-0 z-50">
+    <header className="bg-black px-2 md:px-1 sticky top-0 z-50">
       <div className="md:max-w-7xl mx-auto flex items-center justify-between h-[70px]">
         <Link href="/">
               <Image
